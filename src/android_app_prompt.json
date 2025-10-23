@@ -1,0 +1,755 @@
+{
+  "project_info": {
+    "app_name": "Eco Point",
+    "app_description": "Android 12 IVI(In-Vehicle Infotainment)용 친환경 운전 포인트 적립 및 관리 앱",
+    "tagline": "Drive Smart, Earn Green.",
+    "target_platform": "Android 12+ (IVI System)",
+    "language": "Kotlin",
+    "architecture": "MVVM (Model-View-ViewModel)",
+    "ui_framework": "Jetpack Compose"
+  },
+  
+  "display_specifications": {
+    "screen_resolution": "1920x720",
+    "aspect_ratio": "8:3 (Wide Display)",
+    "orientation": "Landscape (고정)",
+    "active_area": {
+      "width": 1920,
+      "height": 640,
+      "note": "상단 80px 제외 (status bar safe zone)"
+    },
+    "safe_zones": {
+      "top": "80px",
+      "left": "40px",
+      "right": "40px",
+      "bottom": "40px"
+    }
+  },
+
+  "ivi_guidelines": {
+    "touch_target": {
+      "minimum_size": "88x88dp",
+      "description": "모든 터치 가능한 요소는 최소 88x88dp 이상"
+    },
+    "font_sizes": {
+      "unit": "sp (scalable pixels)",
+      "sizes": {
+        "extra_large_title": "32sp",
+        "large_title": "28sp",
+        "title": "24sp",
+        "subtitle": "20sp",
+        "body": "18sp",
+        "body_medium": "16sp",
+        "body_small": "15sp",
+        "caption": "14sp",
+        "caption_small": "12sp"
+      }
+    },
+    "spacing": {
+      "horizontal_margin": "40px",
+      "vertical_margin": "40px",
+      "card_gap": "24px",
+      "element_gap": "12px"
+    }
+  },
+
+  "design_system": {
+    "theme": "Dark Theme",
+    "color_palette": {
+      "background": {
+        "primary": "#121212",
+        "secondary": "#1A1A1A",
+        "tertiary": "#1E1E1E",
+        "card": "#242424"
+      },
+      "primary_colors": {
+        "main": "#81C784",
+        "light": "#A5D6A7",
+        "dark": "#66BB6A"
+      },
+      "secondary_colors": {
+        "main": "#64B5F6",
+        "light": "#90CAF9",
+        "dark": "#42A5F5"
+      },
+      "text": {
+        "primary": "#FFFFFF",
+        "secondary": "#B0BEC5",
+        "disabled": "#757575"
+      },
+      "accent": {
+        "warning": "#FFC107",
+        "error": "#EF5350",
+        "success": "#81C784"
+      },
+      "border": "#2E2E2E"
+    },
+    "typography": {
+      "font_family": "Roboto (Android Default)",
+      "font_weights": {
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600,
+        "bold": 700
+      }
+    },
+    "elevation": {
+      "card": "8dp",
+      "dialog": "16dp",
+      "navigation": "12dp"
+    },
+    "border_radius": {
+      "small": "8dp",
+      "medium": "12dp",
+      "large": "16dp",
+      "extra_large": "20dp"
+    }
+  },
+
+  "app_structure": {
+    "navigation": {
+      "type": "Side Navigation (왼쪽)",
+      "width": "140px",
+      "position": "fixed",
+      "background": "#1E1E1E",
+      "items": [
+        {
+          "id": "main",
+          "label": "메인 화면",
+          "icon": "Home",
+          "screen": "MainDashboardScreen"
+        },
+        {
+          "id": "points",
+          "label": "포인트 관리",
+          "icon": "BarChart",
+          "screen": "PointManagementScreen"
+        },
+        {
+          "id": "analysis",
+          "label": "운전자 분석",
+          "icon": "TrendingUp",
+          "screen": "DriverAnalysisScreen"
+        }
+      ],
+      "logo": {
+        "type": "Gradient Circle with Icon",
+        "size": "64dp",
+        "gradient": ["#81C784", "#64B5F6"]
+      }
+    },
+    
+    "screens": [
+      {
+        "name": "SplashScreen",
+        "description": "앱 시작 시 3초간 표시되는 스플래시 화면",
+        "features": [
+          "그라디언트 배경 (#121212 to #1E1E1E)",
+          "중앙에 Eco Point 로고 (140dp 원형)",
+          "로고 내부에 자동차+나뭇잎 아이콘",
+          "앱 이름 'Eco Point' (32sp, #81C784)",
+          "태그라인 'Drive Smart, Earn Green.' (20sp, #64B5F6)",
+          "하단에 3개의 점 로딩 애니메이션",
+          "전체 화면 1920x720"
+        ],
+        "animations": [
+          "로고 회전 + 스케일 인 (0 → 1, 1초)",
+          "배경 원형 파동 효과 (무한 반복)",
+          "로딩 점 순차 페이드 인/아웃"
+        ],
+        "duration": "3초"
+      },
+      
+      {
+        "name": "MainDashboardScreen",
+        "description": "메인 대시보드 - 식물 성장 및 포인트 적립 시각화",
+        "layout": {
+          "header": {
+            "position": "top-left (80px 내)",
+            "elements": [
+              "날짜/요일 텍스트 (18sp, #B0BEC5)",
+              "날씨 정보 (아이콘 + 온도 + 지역, 16sp, #64B5F6)"
+            ]
+          },
+          "center_area": {
+            "width": "1520px (전체 - 사이드네비 140px - 우측패널 400px)",
+            "height": "640px (활성 영역)",
+            "content": "PlantScene Component"
+          },
+          "right_panel": {
+            "width": "400px",
+            "background": "#1A1A1A",
+            "border_left": "#2E2E2E",
+            "content": "FeedbackSidePanel Component"
+          }
+        },
+        "components": {
+          "plant_scene": {
+            "description": "포인트에 따라 성장하는 식물 애니메이션",
+            "growth_stages": [
+              {
+                "stage": 0,
+                "name": "Seed (씨앗)",
+                "point_range": "0-500",
+                "visual": "56dp 원형 그라디언트 (#81C784 to #66BB6A)",
+                "animation": "부드러운 스케일 + Y축 이동 (2.5초 무한)"
+              },
+              {
+                "stage": 1,
+                "name": "Sprout (새싹)",
+                "point_range": "501-1000",
+                "visual": "Sprout 아이콘 (90dp) + 줄기 (80dp height)",
+                "animation": "약간의 스케일 애니메이션 (3초 무한)"
+              },
+              {
+                "stage": 2,
+                "name": "Full Grown (성장)",
+                "point_range": "1001+",
+                "visual": "중앙 원형 + 4개 나뭇잎 (좌우 대칭) + 줄기 (128dp)",
+                "animation": "나뭇잎 개별 회전 + 전체 Y축 이동"
+              }
+            ],
+            "pot": {
+              "design": "SVG 화분 (200x120)",
+              "colors": ["#4E342E", "#3E2723", "#5D4037", "#6D4C41"],
+              "gradient": "top to bottom"
+            },
+            "watering_can": {
+              "position": "우측 상단 (식물 위)",
+              "size": "180x140",
+              "animation": "물주기 시 기울어짐 (-35도)",
+              "water_drops": "7개 순차 낙하 애니메이션 (#64B5F6)"
+            },
+            "sparkles": {
+              "count": 12,
+              "color": "#81C784",
+              "animation": "포인트 적립 시 상승 + 페이드아웃"
+            }
+          },
+          
+          "points_earned_popup": {
+            "description": "포인트 적립 시 표시되는 중앙 팝업",
+            "trigger": "포인트 획득 이벤트 (2초 후)",
+            "display": "2.8초 딜레이 후 페이드인",
+            "content": [
+              "ECO POINTS +{amount} (32sp, #81C784, bold)",
+              "적립 사유 텍스트 (20sp, #B0BEC5)"
+            ],
+            "animation": "fade in + Y축 상승"
+          },
+          
+          "feedback_side_panel": {
+            "header": {
+              "icon": "Award (24dp, #81C784)",
+              "title": "오늘의 리워드 (24sp)",
+              "subtitle": "친환경 운전으로 포인트를 획득했어요 (14sp)"
+            },
+            "total_card": {
+              "background": "gradient (#81C784 to #66BB6A)",
+              "content": [
+                "오늘 적립 (14sp)",
+                "포인트 합계 (36sp, bold)",
+                "전체 보유: {total} P (12sp)"
+              ],
+              "icon": "Leaf 애니메이션 (회전)"
+            },
+            "recent_entries": {
+              "title": "적립 내역",
+              "count": 3,
+              "items": [
+                {
+                  "icon": "Target",
+                  "label": "경제속도 준수",
+                  "points": 130,
+                  "time": "14:23",
+                  "color": "#81C784"
+                },
+                {
+                  "icon": "Leaf",
+                  "label": "급가속 0회",
+                  "points": 85,
+                  "time": "14:10",
+                  "color": "#66BB6A"
+                },
+                {
+                  "icon": "Zap",
+                  "label": "급감속 0회",
+                  "points": 85,
+                  "time": "14:10",
+                  "color": "#64B5F6"
+                }
+              ],
+              "card_style": {
+                "background": "#242424",
+                "border": "#2E2E2E",
+                "padding": "16dp",
+                "hover_effect": "#2A2A2A"
+              }
+            }
+          }
+        }
+      },
+      
+      {
+        "name": "PointManagementScreen",
+        "description": "포인트 내역, 리포트, 교환 관리 화면",
+        "layout": {
+          "header": {
+            "title": "포인트 관리 (28sp)",
+            "subtitle": "포인트 현황과 교환 내역을 확인하세요 (16sp)"
+          },
+          "tabs": {
+            "style": "Horizontal tabs",
+            "height": "48dp",
+            "background": "#1E1E1E",
+            "items": [
+              {
+                "id": "history",
+                "label": "포인트 내역",
+                "active_color": "#81C784"
+              },
+              {
+                "id": "report",
+                "label": "리포트",
+                "active_color": "#81C784"
+              },
+              {
+                "id": "exchange",
+                "label": "포인트 교환",
+                "active_color": "#81C784"
+              }
+            ]
+          }
+        },
+        "tabs_content": {
+          "history_tab": {
+            "grid": "2 columns",
+            "cards": [
+              {
+                "type": "current_points",
+                "title": "현재 포인트 (20sp)",
+                "value": "{points}점 (32sp, #81C784, bold)"
+              },
+              {
+                "type": "recent_transactions",
+                "title": "최근 거래 (18sp)",
+                "max_height": "200dp",
+                "scrollable": true,
+                "items": [
+                  {
+                    "type": "획득",
+                    "description": "경제속도 준수",
+                    "points": "+130",
+                    "date": "2025.08.14",
+                    "color": "#81C784"
+                  },
+                  {
+                    "type": "획득",
+                    "description": "정속 주행",
+                    "points": "+45",
+                    "date": "2025.08.14",
+                    "color": "#81C784"
+                  },
+                  {
+                    "type": "사용",
+                    "description": "커피 쿠폰",
+                    "points": "-300",
+                    "date": "2025.08.13",
+                    "color": "#FFD54F"
+                  }
+                ]
+              }
+            ]
+          },
+          
+          "report_tab": {
+            "chart": {
+              "type": "LineChart (MPAndroidChart 또는 Vico)",
+              "title": "일별 적립 추이 (20sp)",
+              "data": [
+                {"date": "8/8", "points": 98},
+                {"date": "8/9", "points": 124},
+                {"date": "8/10", "points": 145},
+                {"date": "8/11", "points": 132},
+                {"date": "8/12", "points": 167},
+                {"date": "8/13", "points": 189},
+                {"date": "8/14", "points": 210}
+              ],
+              "line_color": "#64B5F6",
+              "line_width": "3dp",
+              "grid_color": "#2E2E2E",
+              "axis_color": "#B0BEC5",
+              "height": "270dp"
+            }
+          },
+          
+          "exchange_tab": {
+            "grid": "3 columns",
+            "items": [
+              {
+                "id": 1,
+                "icon": "Coffee",
+                "label": "커피 쿠폰",
+                "points_required": 300,
+                "icon_size": "32dp"
+              },
+              {
+                "id": 2,
+                "icon": "Battery Charging",
+                "label": "충전 크레딧",
+                "points_required": 800,
+                "icon_size": "32dp"
+              },
+              {
+                "id": 3,
+                "icon": "Gift",
+                "label": "기프트 카드",
+                "points_required": 1000,
+                "icon_size": "32dp"
+              }
+            ],
+            "card_style": {
+              "available": {
+                "gradient": "#81C784 to #64B5F6",
+                "hover_border": "#81C784",
+                "button_text": "교환",
+                "button_color": "#81C784"
+              },
+              "unavailable": {
+                "background": "#2E2E2E",
+                "opacity": 0.5,
+                "button_text": "부족",
+                "button_disabled": true
+              }
+            }
+          }
+        },
+        "dialog": {
+          "type": "AlertDialog",
+          "title": "교환 확인 (24sp)",
+          "message": "{points} 포인트를 사용하여 {item}로 교환하시겠습니까? (16sp)",
+          "buttons": [
+            {
+              "text": "취소",
+              "style": "outlined",
+              "color": "#B0BEC5"
+            },
+            {
+              "text": "확인",
+              "style": "filled",
+              "color": "#81C784"
+            }
+          ]
+        }
+      },
+      
+      {
+        "name": "DriverAnalysisScreen",
+        "description": "운전 패턴 분석 및 피드백 제공 화면",
+        "layout": {
+          "header": {
+            "title": "운전자 분석 (28sp)",
+            "subtitle": "운전 분석 요약 (2025.08.14 ~ 2025.08.20) (16sp)"
+          },
+          "sections": [
+            {
+              "type": "charts_grid",
+              "grid": "2 columns",
+              "gap": "24dp"
+            },
+            {
+              "type": "feedback_cards",
+              "grid": "3 columns",
+              "gap": "24dp"
+            },
+            {
+              "type": "summary_card",
+              "span": "full width"
+            }
+          ]
+        },
+        "charts": {
+          "pattern_chart": {
+            "type": "BarChart",
+            "title": "운전 패턴 분석 (20sp)",
+            "height": "250dp",
+            "data": [
+              {"name": "급가속", "value": 3, "color": "#EF5350"},
+              {"name": "급감속", "value": 5, "color": "#EF5350"},
+              {"name": "공회전", "value": 2, "color": "#FFC107"},
+              {"name": "급출발", "value": 1, "color": "#81C784"},
+              {"name": "급정지", "value": 2, "color": "#E53935"}
+            ],
+            "bar_radius": "6dp",
+            "grid_color": "#2E2E2E",
+            "axis_text_size": "14sp"
+          },
+          
+          "trend_chart": {
+            "type": "Dual LineChart",
+            "title": "에코 포인트 / 평균 속도 추이 (20sp)",
+            "height": "250dp",
+            "data": [
+              {"date": "8/14", "ecoPoints": 120, "avgSpeed": 62},
+              {"date": "8/15", "ecoPoints": 135, "avgSpeed": 65},
+              {"date": "8/16", "ecoPoints": 150, "avgSpeed": 67},
+              {"date": "8/17", "ecoPoints": 140, "avgSpeed": 70},
+              {"date": "8/18", "ecoPoints": 160, "avgSpeed": 72},
+              {"date": "8/19", "ecoPoints": 175, "avgSpeed": 73},
+              {"date": "8/20", "ecoPoints": 180, "avgSpeed": 74}
+            ],
+            "lines": [
+              {
+                "name": "에코 포인트",
+                "color": "#81C784",
+                "width": "2.5dp",
+                "y_axis": "left"
+              },
+              {
+                "name": "평균 속도 (km/h)",
+                "color": "#64B5F6",
+                "width": "2.5dp",
+                "y_axis": "right"
+              }
+            ]
+          }
+        },
+        
+        "feedback_cards": {
+          "items": [
+            {
+              "icon": "ThumbsUp",
+              "text": "급가속 3회 감소, 매우 안정적 운전 유지!",
+              "color": "#81C784",
+              "border_left": "3dp"
+            },
+            {
+              "icon": "Leaf",
+              "text": "공회전 시간 12% 개선, 에너지 절약 우수!",
+              "color": "#64B5F6",
+              "border_left": "3dp"
+            },
+            {
+              "icon": "AlertTriangle",
+              "text": "급감속 5회 발생 — 부드러운 제동 필요",
+              "color": "#FFC107",
+              "border_left": "3dp"
+            }
+          ],
+          "card_style": {
+            "background": "#1E1E1E",
+            "padding": "20dp",
+            "height": "180dp"
+          },
+          "animation": "순차 페이드인 (0.1초 간격)"
+        },
+        
+        "summary_card": {
+          "background": "#1E1E1E",
+          "height": "160dp",
+          "centered": true,
+          "content": {
+            "animation": {
+              "type": "SVG Circle + Checkmark",
+              "size": "64dp",
+              "colors": ["#81C784", "#64B5F6"],
+              "effect": "path drawing + rotation"
+            },
+            "title": "��전 분석 대시보드 (20sp)",
+            "subtitle": "안전하고 경제적인 운전을 실천하고 있습니다 (16sp)"
+          }
+        }
+      }
+    ]
+  },
+
+  "data_models": {
+    "EcoPoint": {
+      "fields": [
+        "id: Long",
+        "userId: String",
+        "totalPoints: Int",
+        "dailyPoints: Int",
+        "lastUpdated: Date"
+      ]
+    },
+    "PointEntry": {
+      "fields": [
+        "id: Long",
+        "type: String (획득/사용)",
+        "category: String",
+        "points: Int",
+        "description: String",
+        "timestamp: Date",
+        "color: String"
+      ]
+    },
+    "DrivingPattern": {
+      "fields": [
+        "id: Long",
+        "date: Date",
+        "rapidAcceleration: Int",
+        "rapidDeceleration: Int",
+        "idleTime: Int",
+        "avgSpeed: Float",
+        "ecoPoints: Int"
+      ]
+    },
+    "ExchangeItem": {
+      "fields": [
+        "id: Long",
+        "name: String",
+        "pointsRequired: Int",
+        "iconName: String",
+        "available: Boolean"
+      ]
+    }
+  },
+
+  "animations": {
+    "plant_growth": {
+      "type": "Custom Compose Animation",
+      "duration": "1600ms",
+      "easing": "EaseInOutCubic",
+      "trigger": "포인트 변경"
+    },
+    "watering_animation": {
+      "phases": [
+        {"action": "물뿌리개 등장", "duration": "600ms"},
+        {"action": "기울어짐", "angle": "-35deg", "duration": "2500ms"},
+        {"action": "물방울 낙하", "count": 7, "interval": "100ms"}
+      ]
+    },
+    "sparkle_effect": {
+      "count": 12,
+      "duration": "2400ms",
+      "direction": "위로 상승",
+      "opacity": "0 → 1 → 0"
+    },
+    "card_entrance": {
+      "type": "FadeIn + SlideUp",
+      "duration": "400ms",
+      "stagger": "100ms"
+    },
+    "tab_transition": {
+      "type": "Crossfade",
+      "duration": "300ms"
+    }
+  },
+
+  "state_management": {
+    "architecture": "MVVM + StateFlow",
+    "viewmodels": [
+      "MainDashboardViewModel",
+      "PointManagementViewModel",
+      "DriverAnalysisViewModel"
+    ],
+    "state_holders": [
+      "ecoPoints: StateFlow<Int>",
+      "pointEntries: StateFlow<List<PointEntry>>",
+      "drivingPatterns: StateFlow<List<DrivingPattern>>",
+      "selectedTab: MutableState<String>",
+      "plantGrowthStage: Derived from ecoPoints"
+    ]
+  },
+
+  "libraries": {
+    "required": [
+      "androidx.compose.ui:ui",
+      "androidx.compose.material3:material3",
+      "androidx.compose.animation:animation",
+      "androidx.lifecycle:lifecycle-viewmodel-compose",
+      "androidx.navigation:navigation-compose",
+      "com.google.accompanist:accompanist-systemuicontroller",
+      "MPAndroidChart 또는 Vico (차트 라이브러리)",
+      "Coil (이미지 로딩)",
+      "kotlinx-coroutines-android"
+    ],
+    "optional": [
+      "Lottie (추가 애니메이션)",
+      "Room (로컬 데이터베이스)",
+      "Retrofit (API 연동 시)"
+    ]
+  },
+
+  "features": {
+    "core": [
+      "포인트 실시간 적립 및 표시",
+      "식물 성장 비주얼 피드백",
+      "운전 패턴 분석 및 시각화",
+      "포인트 교환 시스템",
+      "일별/주별 리포트"
+    ],
+    "animations": [
+      "식물 성장 애니메이션 (3단계)",
+      "물뿌리개 물주기 효과",
+      "반짝임 효과 (sparkles)",
+      "카드 등장 애니메이션",
+      "차트 그리기 애니메이션"
+    ],
+    "ux": [
+      "IVI 최적화 터치 타겟",
+      "다크 테마 일관성",
+      "명확한 시각적 피드백",
+      "직관적인 네비게이션",
+      "고대비 텍스트"
+    ]
+  },
+
+  "development_notes": {
+    "performance": [
+      "Compose로 60fps 유지",
+      "차트 데이터 페이징 처리",
+      "애니메이션 최적화 (remember)",
+      "LazyColumn 사용으로 메모리 효율화"
+    ],
+    "accessibility": [
+      "모든 터치 영역 88dp 이상",
+      "텍스트 크기 sp 단위",
+      "색상 대비 4.5:1 이상",
+      "아이콘에 contentDescription 추가"
+    ],
+    "testing": [
+      "1920x720 에뮬레이터 설정",
+      "Landscape 고정 테스트",
+      "다양한 포인트 시나리오 테스트",
+      "애니메이션 성능 프로파일링"
+    ]
+  },
+
+  "implementation_priority": [
+    "1. 프로젝트 구조 및 테마 설정",
+    "2. Navigation 및 화면 전환",
+    "3. 데이터 모델 및 ViewModel",
+    "4. MainDashboard 기본 레이아웃",
+    "5. PlantScene 컴포넌트 (정적 → 애니메이션)",
+    "6. FeedbackSidePanel 구현",
+    "7. PointManagement 화면 (탭 + 차트)",
+    "8. DriverAnalysis 화면 (차트 + 피드백)",
+    "9. 물뿌리개 애니메이션 추가",
+    "10. 반짝임 효과 및 최종 폴리싱"
+  ],
+
+  "sample_data": {
+    "initial_points": 1230,
+    "daily_entries": [
+      {"label": "경제속도 준수", "points": 130, "time": "14:23", "icon": "Target", "color": "#81C784"},
+      {"label": "급가속 0회", "points": 85, "time": "14:10", "icon": "Leaf", "color": "#66BB6A"},
+      {"label": "급감속 0회", "points": 85, "time": "14:10", "icon": "Zap", "color": "#64B5F6"}
+    ],
+    "exchange_items": [
+      {"name": "커피 쿠폰", "points": 300, "icon": "Coffee"},
+      {"name": "충전 크레딧", "points": 800, "icon": "BatteryCharging"},
+      {"name": "기프트 카드", "points": 1000, "icon": "Gift"}
+    ]
+  },
+
+  "additional_instructions": {
+    "code_style": "Kotlin 코드 컨벤션 준수, Compose Best Practices 적용",
+    "comments": "각 컴포넌트에 한글 주석 추가 (특히 IVI 가이드라인 관련)",
+    "theming": "Material3 다크 테마 커스터마이징, 색상은 정확히 명시된 값 사용",
+    "testing_data": "더미 데이터를 사용하여 모든 상태 테스트 가능하도록 구현",
+    "modularity": "재사용 가능한 Composable 함수로 분리",
+    "error_handling": "포인트 부족, 네트워크 오류 등 예외 상황 Toast 또는 Snackbar로 처리"
+  }
+}
