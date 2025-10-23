@@ -74,7 +74,7 @@ export function DriverAnalysisPage() {
       <div className="grid grid-cols-2 gap-6 mb-6">
         {/* Pattern Chart */}
         <Card
-          className="bg-[#1E1E1E] border-[#2E2E2E] p-3"
+          className="bg-[#1E1E1E] border-[#2E2E2E] p-3 flex flex-col justify-center"
           style={{
             boxShadow: "0px 3px 10px rgba(0,0,0,0.3)",
             maxHeight: "250px",
