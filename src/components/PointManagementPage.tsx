@@ -373,7 +373,7 @@ export function PointManagementPage({
                           minWidth: "48px"
                         }}
                       >
-                        {tx.type}
+                        {tx.type === "획득" ? "적립" : tx.type}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-[#FFFFFF]" style={{ fontSize: "15px", fontWeight: 500 }}>

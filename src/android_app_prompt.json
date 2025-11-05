@@ -133,9 +133,47 @@
         }
       ],
       "logo": {
-        "type": "Gradient Circle with Icon",
+        "type": "Custom SVG - 새싹 로고",
         "size": "64dp",
-        "gradient": ["#81C784", "#64B5F6"]
+        "design": {
+          "background": "그라디언트 원형 (#81C784 to #64B5F6)",
+          "border_radius": "16dp",
+          "shadow": "0 4px 16px rgba(129,199,132,0.4)",
+          "svg_content": {
+            "description": "흙에서 돋아나는 새싹",
+            "viewBox": "40x40",
+            "elements": [
+              {
+                "name": "흙더미",
+                "shapes": [
+                  "ellipse cx=20 cy=30 rx=14 ry=4 fill=#8D6E63",
+                  "path (흙 윤곽) fill=#A1887F",
+                  "작은 돌 2개 (ellipse) fill=#6D4C41"
+                ]
+              },
+              {
+                "name": "줄기",
+                "shape": "path M20,24 L20,14 stroke=#7CB342 strokeWidth=1.5"
+              },
+              {
+                "name": "왼쪽 잎",
+                "shapes": [
+                  "path (곡선 잎 형태) fill=#9CCC65",
+                  "내부 하이라이트 fill=#8BC34A opacity=0.7",
+                  "잎맥 stroke=#7CB342"
+                ]
+              },
+              {
+                "name": "오른쪽 잎",
+                "shapes": [
+                  "path (곡선 잎 형태) fill=#9CCC65",
+                  "내부 하이라이트 fill=#8BC34A opacity=0.7",
+                  "잎맥 stroke=#7CB342"
+                ]
+              }
+            ]
+          }
+        }
       }
     },
     
@@ -191,22 +229,151 @@
                 "stage": 0,
                 "name": "Seed (씨앗)",
                 "point_range": "0-500",
-                "visual": "56dp 원형 그라디언트 (#81C784 to #66BB6A)",
-                "animation": "부드러운 스케일 + Y축 이동 (2.5초 무한)"
+                "svg_design": {
+                  "size": "60x60dp",
+                  "description": "갈색과 녹색이 반반 나뉜 씨앗",
+                  "elements": [
+                    {
+                      "name": "왼쪽 반쪽 (갈색)",
+                      "path": "M30,10 C20,10 10,18 10,30 C10,42 20,50 30,50 L30,10 Z",
+                      "fill": "#C17A4F"
+                    },
+                    {
+                      "name": "왼쪽 텍스처",
+                      "shapes": [
+                        "ellipse cx=22 cy=25 rx=3 ry=5 fill=#A66943 opacity=0.5",
+                        "path (곡선) stroke=#A66943 opacity=0.4"
+                      ]
+                    },
+                    {
+                      "name": "오른쪽 반쪽 (녹색)",
+                      "path": "M30,10 C40,10 50,18 50,30 C50,42 40,50 30,50 L30,10 Z",
+                      "fill": "#81C784"
+                    },
+                    {
+                      "name": "오른��� 텍스처",
+                      "shapes": [
+                        "ellipse cx=37 cy=23 rx=4 ry=3 fill=#A5D6A7 opacity=0.6",
+                        "ellipse cx=38 cy=32 rx=3 ry=4 fill=#A5D6A7 opacity=0.4"
+                      ]
+                    },
+                    {
+                      "name": "중앙선",
+                      "path": "M30,10 L30,50",
+                      "stroke": "#6D4C41",
+                      "strokeWidth": "1.5dp",
+                      "opacity": 0.3
+                    }
+                  ]
+                },
+                "animation": "scale [1, 1.08, 1] + Y축 [0, -4, 0] (2.5초 무한 반복)"
               },
               {
                 "stage": 1,
                 "name": "Sprout (새싹)",
                 "point_range": "501-1000",
-                "visual": "Sprout 아이콘 (90dp) + 줄기 (80dp height)",
-                "animation": "약간의 스케일 애니메이션 (3초 무한)"
+                "svg_design": {
+                  "size": "120x140dp",
+                  "description": "흙더미 위에 자라는 새싹",
+                  "elements": [
+                    {
+                      "name": "왼쪽 잎",
+                      "group": [
+                        "ellipse cx=30 cy=35 rx=28 ry=18 fill=#81C784 rotate(-25)",
+                        "ellipse cx=30 cy=35 rx=20 ry=12 fill=#A5D6A7 opacity=0.6 rotate(-25)",
+                        "잎맥 path M30,35 L50,45 stroke=#66BB6A strokeWidth=1.5"
+                      ],
+                      "animation": "rotate [0, -3, 0] (2.5초 무한)"
+                    },
+                    {
+                      "name": "오른쪽 잎",
+                      "group": [
+                        "ellipse cx=90 cy=35 rx=28 ry=18 fill=#66BB6A rotate(25)",
+                        "ellipse cx=90 cy=35 rx=20 ry=12 fill=#A5D6A7 opacity=0.6 rotate(25)",
+                        "잎맥 path M90,35 L70,45 stroke=#81C784 strokeWidth=1.5"
+                      ],
+                      "animation": "rotate [0, 3, 0] (2.5초 무한, delay 0.3초)"
+                    },
+                    {
+                      "name": "줄기",
+                      "paths": [
+                        "path M60,45 Q58,80 60,110 stroke=#66BB6A strokeWidth=5",
+                        "path M60,45 Q58,80 60,110 stroke=#81C784 strokeWidth=3 (위에 덮기)"
+                      ]
+                    },
+                    {
+                      "name": "흙더미",
+                      "shapes": [
+                        "ellipse cx=60 cy=115 rx=35 ry=12 fill=#8D6E63",
+                        "ellipse cx=60 cy=112 rx=30 ry=10 fill=#A1887F",
+                        "circle cx=50 cy=110 r=4 fill=#6D4C41 opacity=0.4",
+                        "circle cx=72 cy=112 r=5 fill=#6D4C41 opacity=0.3"
+                      ]
+                    }
+                  ]
+                },
+                "animation": "scale [1, 1.02, 1] (3초 무한 반복)"
               },
               {
                 "stage": 2,
-                "name": "Full Grown (성장)",
+                "name": "Full Grown Plant (다육식물)",
                 "point_range": "1001+",
-                "visual": "중앙 원형 + 4개 나뭇잎 (좌우 대칭) + 줄기 (128dp)",
-                "animation": "나뭇잎 개별 회전 + 전체 Y축 이동"
+                "svg_design": {
+                  "size": "180x200dp",
+                  "description": "여러 겹의 잎을 가진 다육식물",
+                  "elements": [
+                    {
+                      "name": "최상단 중앙 잎",
+                      "paths": [
+                        "path M90,10 C80,10 70,20 70,35 C70,50 80,65 90,70 C100,65 110,50 110,35 C110,20 100,10 90,10 Z fill=#66BB6A",
+                        "path M90,15 C83,15 77,22 77,33 C77,44 83,55 90,58 C97,55 103,44 103,33 C103,22 97,15 90,15 Z fill=#81C784",
+                        "잎맥 path M90,20 L90,60 stroke=#4CAF50 strokeWidth=1.5 opacity=0.3"
+                      ],
+                      "animation": "scale [1, 1.03, 1] (2.8초 무한)"
+                    },
+                    {
+                      "name": "중앙 위 왼쪽 잎",
+                      "paths": [
+                        "path M90,70 C70,75 50,85 45,100 C40,115 50,125 65,120 C80,115 88,100 90,85 Z fill=#81C784",
+                        "path M85,80 C70,83 60,90 58,100 C56,110 62,117 72,114 C82,111 87,100 87,90 Z fill=#A5D6A7 opacity=0.7"
+                      ],
+                      "animation": "rotate [0, -2, 0] (2.6초 무한)"
+                    },
+                    {
+                      "name": "중앙 위 오른쪽 잎",
+                      "paths": [
+                        "path M90,70 C110,75 130,85 135,100 C140,115 130,125 115,120 C100,115 92,100 90,85 Z fill=#66BB6A",
+                        "path M95,80 C110,83 120,90 122,100 C124,110 118,117 108,114 C98,111 93,100 93,90 Z fill=#A5D6A7 opacity=0.7"
+                      ],
+                      "animation": "rotate [0, 2, 0] (2.6초 무한, delay 0.2초)"
+                    },
+                    {
+                      "name": "하단 왼쪽 큰 잎",
+                      "paths": [
+                        "path M90,100 C65,110 35,125 25,145 C15,165 30,180 55,170 C80,160 88,135 90,115 Z fill=#81C784",
+                        "path M85,110 C65,118 45,130 38,145 C31,160 42,170 60,163 C78,156 84,135 85,120 Z fill=#A5D6A7 opacity=0.6"
+                      ],
+                      "animation": "rotate [0, -3, 0] (3.2초 무한)"
+                    },
+                    {
+                      "name": "하단 오른쪽 큰 잎",
+                      "paths": [
+                        "path M90,100 C115,110 145,125 155,145 C165,165 150,180 125,170 C100,160 92,135 90,115 Z fill=#66BB6A",
+                        "path M95,110 C115,118 135,130 142,145 C149,160 138,170 120,163 C102,156 96,135 95,120 Z fill=#A5D6A7 opacity=0.6"
+                      ],
+                      "animation": "rotate [0, 3, 0] (3.2초 무한, delay 0.3초)"
+                    },
+                    {
+                      "name": "중앙 하이라이트",
+                      "circles": [
+                        "circle cx=90 cy=90 r=25 fill=#81C784",
+                        "circle cx=90 cy=88 r=18 fill=#A5D6A7 opacity=0.5",
+                        "circle cx=85 cy=83 r=8 fill=#C8E6C9 opacity=0.6"
+                      ]
+                    }
+                  ]
+                },
+                "animation": "전체 Y축 [0, -5, 0] (3초 무한 반복), 각 잎 개별 회전 애니메이션"
               }
             ],
             "pot": {
@@ -322,64 +489,105 @@
           }
         },
         "tabs_content": {
-          "history_tab": {
-            "grid": "2 columns",
-            "cards": [
-              {
-                "type": "current_points",
-                "title": "현재 포인트 (20sp)",
-                "value": "{points}점 (32sp, #81C784, bold)"
-              },
-              {
-                "type": "recent_transactions",
-                "title": "최근 거래 (18sp)",
-                "max_height": "200dp",
-                "scrollable": true,
-                "items": [
-                  {
-                    "type": "획득",
-                    "description": "경제속도 준수",
-                    "points": "+130",
-                    "date": "2025.08.14",
-                    "color": "#81C784"
-                  },
-                  {
-                    "type": "획득",
-                    "description": "정속 주행",
-                    "points": "+45",
-                    "date": "2025.08.14",
-                    "color": "#81C784"
-                  },
-                  {
-                    "type": "사용",
-                    "description": "커피 쿠폰",
-                    "points": "-300",
-                    "date": "2025.08.13",
-                    "color": "#FFD54F"
+          "history_and_report_unified": {
+            "description": "포인트 내역과 리포트 탭을 통합한 개선된 레이아웃 - 스크롤 없이 한 화면에 모든 내용 표시",
+            "layout": "상단 3개 통계 카드 + 하단 2열 (거래 내역 / 차트)",
+            "top_stats_cards": {
+              "grid": "3 columns (equal width)",
+              "height": "106dp",
+              "gap": "20dp",
+              "cards": [
+                {
+                  "type": "current_balance",
+                  "title": "현재 보유 (14sp, #B0BEC5)",
+                  "icon": "Wallet (16dp, #81C784)",
+                  "value": "{total}P (36sp, #81C784, bold, lineHeight=1)",
+                  "subtitle": "전체 보유 포인트 (13sp, #B0BEC5)",
+                  "background": "#1E1E1E",
+                  "layout": "flex flex-col justify-center"
+                },
+                {
+                  "type": "today_earned",
+                  "title": "오늘 적립 (14sp, #B0BEC5)",
+                  "icon": "Calendar (16dp, #64B5F6)",
+                  "value": "+{today}P (36sp, #64B5F6, bold, lineHeight=1)",
+                  "subtitle": "2025.08.14 (13sp, #B0BEC5)",
+                  "background": "#1E1E1E",
+                  "layout": "flex flex-col justify-center"
+                },
+                {
+                  "type": "week_earned",
+                  "title": "이번 주 적립 (14sp, #B0BEC5)",
+                  "icon": "TrendingUp (16dp, #A5D6A7)",
+                  "value": "+{week}P (36sp, #A5D6A7, bold, lineHeight=1)",
+                  "subtitle": "8/8 ~ 8/14 (13sp, #B0BEC5)",
+                  "background": "#1E1E1E",
+                  "layout": "flex flex-col justify-center"
+                }
+              ]
+            },
+            "bottom_content": {
+              "grid": "2 columns (equal width)",
+              "gap": "20dp",
+              "height": "auto (나머지 공간 채우기)",
+              "sections": [
+                {
+                  "type": "transaction_history",
+                  "title": "거래 내역 (20sp)",
+                  "background": "#1E1E1E",
+                  "scrollable": true,
+                  "max_height": "280dp",
+                  "items": [
+                    {
+                      "type": "획득",
+                      "icon": "ArrowDownCircle (#81C784)",
+                      "label": "경제속도 준수",
+                      "points": "+130",
+                      "date": "2025.08.14",
+                      "time": "14:23"
+                    },
+                    {
+                      "type": "획득",
+                      "icon": "ArrowDownCircle (#81C784)",
+                      "label": "정속 주행 30분",
+                      "points": "+45",
+                      "date": "2025.08.14",
+                      "time": "13:50"
+                    },
+                    {
+                      "type": "사용",
+                      "icon": "ArrowUpCircle (#FFD54F)",
+                      "label": "커피 쿠폰 교환",
+                      "points": "-300",
+                      "date": "2025.08.13",
+                      "time": "16:20"
+                    }
+                  ]
+                },
+                {
+                  "type": "weekly_chart",
+                  "title": "주간 적립 추이 (20sp)",
+                  "background": "#1E1E1E",
+                  "chart": {
+                    "type": "LineChart",
+                    "height": "280dp",
+                    "data": [
+                      {"date": "8/8", "points": 98},
+                      {"date": "8/9", "points": 124},
+                      {"date": "8/10", "points": 145},
+                      {"date": "8/11", "points": 132},
+                      {"date": "8/12", "points": 167},
+                      {"date": "8/13", "points": 189},
+                      {"date": "8/14", "points": 210}
+                    ],
+                    "line_color": "#64B5F6",
+                    "line_width": "2.5dp",
+                    "fill_gradient": "rgba(100,181,246,0.1) to transparent",
+                    "grid_color": "#2E2E2E",
+                    "axis_color": "#B0BEC5"
                   }
-                ]
-              }
-            ]
-          },
-          
-          "report_tab": {
-            "chart": {
-              "type": "LineChart (MPAndroidChart 또는 Vico)",
-              "title": "일별 적립 추이 (20sp)",
-              "data": [
-                {"date": "8/8", "points": 98},
-                {"date": "8/9", "points": 124},
-                {"date": "8/10", "points": 145},
-                {"date": "8/11", "points": 132},
-                {"date": "8/12", "points": 167},
-                {"date": "8/13", "points": 189},
-                {"date": "8/14", "points": 210}
-              ],
-              "line_color": "#64B5F6",
-              "line_width": "3dp",
-              "grid_color": "#2E2E2E",
-              "axis_color": "#B0BEC5",
-              "height": "270dp"
+                }
+              ]
             }
           },
           
@@ -448,8 +656,13 @@
         "description": "운전 패턴 분석 및 피드백 제공 화면",
         "layout": {
           "header": {
-            "title": "운전자 분석 (28sp)",
-            "subtitle": "운전 분석 요약 (2025.08.14 ~ 2025.08.20) (16sp)"
+            "layout": "flex items-center justify-between",
+            "left": {
+              "title": "운전자 분석 (28sp)"
+            },
+            "right": {
+              "subtitle": "운전 분석 요약 (2025.08.14 ~ 2025.08.20) (16sp)"
+            }
           },
           "sections": [
             {
@@ -555,7 +768,7 @@
               "colors": ["#81C784", "#64B5F6"],
               "effect": "path drawing + rotation"
             },
-            "title": "��전 분석 대시보드 (20sp)",
+            "title": "전 분석 대시보드 (20sp)",
             "subtitle": "안전하고 경제적인 운전을 실천하고 있습니다 (16sp)"
           }
         }

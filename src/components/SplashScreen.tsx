@@ -113,7 +113,7 @@ export function SplashScreen() {
           transition={{ delay: 0.8, duration: 0.6 }}
           className="text-[#4CAF50] text-6xl mb-4"
         >
-          Eco Point
+          Eco Drive
         </motion.div>
 
         {/* Tagline */}

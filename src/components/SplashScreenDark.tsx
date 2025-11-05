@@ -136,7 +136,7 @@ export function SplashScreenDark() {
           transition={{ delay: 0.8, duration: 0.6 }}
           className="text-[#81C784] text-6xl mb-4"
         >
-          Eco Point
+          Eco Drive
         </motion.div>
 
         {/* Tagline */}
