@@ -1,12 +1,19 @@
 {
   "project_info": {
-    "app_name": "Eco Point",
+    "app_name": "Eco Drive",
     "app_description": "Android 12 IVI(In-Vehicle Infotainment)용 친환경 운전 포인트 적립 및 관리 앱",
     "tagline": "Drive Smart, Earn Green.",
     "target_platform": "Android 12+ (IVI System)",
     "language": "Kotlin",
     "architecture": "MVVM (Model-View-ViewModel)",
-    "ui_framework": "Jetpack Compose"
+    "ui_framework": "Jetpack Compose",
+    "web_prototype": {
+      "framework": "React + TypeScript",
+      "styling": "Tailwind CSS v4.0",
+      "animation": "Motion (Framer Motion)",
+      "charts": "Recharts",
+      "note": "웹 프로토타입은 Android 앱 개발 전 디자인 검증용"
+    }
   },
   
   "display_specifications": {
@@ -29,7 +36,12 @@
   "ivi_guidelines": {
     "touch_target": {
       "minimum_size": "88x88dp",
-      "description": "모든 터치 가능한 요소는 최소 88x88dp 이상"
+      "description": "모든 터치 가능한 요소는 최소 88x88dp 이상",
+      "examples": [
+        "네비게이션 버튼: 88x88px",
+        "주간 캘린더 요일 박스: 64x64px (작게 조정)",
+        "주/월 전환 버튼: 44x44px (최소값)"
+      ]
     },
     "font_sizes": {
       "unit": "sp (scalable pixels)",
@@ -60,7 +72,8 @@
         "primary": "#121212",
         "secondary": "#1A1A1A",
         "tertiary": "#1E1E1E",
-        "card": "#242424"
+        "card": "#242424",
+        "elevated": "#2E2E2E"
       },
       "primary_colors": {
         "main": "#81C784",
@@ -79,10 +92,18 @@
       },
       "accent": {
         "warning": "#FFC107",
+        "warning_alt": "#FFD54F",
         "error": "#EF5350",
+        "error_dark": "#E53935",
         "success": "#81C784"
       },
-      "border": "#2E2E2E"
+      "border": "#2E2E2E",
+      "soil_colors": {
+        "primary": "#8D6E63",
+        "secondary": "#A1887F",
+        "dark": "#6D4C41",
+        "pot": ["#4E342E", "#3E2723", "#5D4037", "#6D4C41"]
+      }
     },
     "typography": {
       "font_family": "Roboto (Android Default)",
@@ -112,32 +133,37 @@
       "width": "140px",
       "position": "fixed",
       "background": "#1E1E1E",
+      "shadow": "4px 0 10px rgba(0,0,0,0.3)",
       "items": [
         {
           "id": "main",
           "label": "메인 화면",
           "icon": "Home",
-          "screen": "MainDashboardScreen"
+          "screen": "MainDashboardScreen",
+          "file": "/components/MainDashboardPage.tsx"
         },
         {
           "id": "points",
           "label": "포인트 관리",
-          "icon": "BarChart",
-          "screen": "PointManagementScreen"
+          "icon": "BarChart3",
+          "screen": "PointManagementScreen",
+          "file": "/components/PointManagementPage.tsx"
         },
         {
           "id": "analysis",
           "label": "운전자 분석",
           "icon": "TrendingUp",
-          "screen": "DriverAnalysisScreen"
+          "screen": "DriverAnalysisScreen",
+          "file": "/components/DriverAnalysisPage.tsx"
         }
       ],
       "logo": {
         "type": "Custom SVG - 새싹 로고",
-        "size": "64dp",
+        "size": "64dp (w-16 h-16)",
+        "file": "/components/SideNav.tsx",
         "design": {
           "background": "그라디언트 원형 (#81C784 to #64B5F6)",
-          "border_radius": "16dp",
+          "border_radius": "16dp (rounded-2xl)",
           "shadow": "0 4px 16px rgba(129,199,132,0.4)",
           "svg_content": {
             "description": "흙에서 돋아나는 새싹",
@@ -174,18 +200,30 @@
             ]
           }
         }
+      },
+      "button_specs": {
+        "min_height": "88px",
+        "min_width": "88px",
+        "gap": "12px (gap-3)",
+        "active_indicator": {
+          "background": "#64B5F6/20",
+          "border": "2px solid #64B5F6",
+          "shadow": "0 0 16px rgba(100,181,246,0.3)",
+          "animation": "layoutId transition with spring"
+        }
       }
     },
     
     "screens": [
       {
         "name": "SplashScreen",
+        "file": "/components/SplashScreenDark.tsx",
         "description": "앱 시작 시 3초간 표시되는 스플래시 화면",
         "features": [
           "그라디언트 배경 (#121212 to #1E1E1E)",
-          "중앙에 Eco Point 로고 (140dp 원형)",
+          "중앙에 Eco Drive 로고 (140dp 원형)",
           "로고 내부에 자동차+나뭇잎 아이콘",
-          "앱 이름 'Eco Point' (32sp, #81C784)",
+          "앱 이름 'Eco Drive' (32sp, #81C784)",
           "태그라인 'Drive Smart, Earn Green.' (20sp, #64B5F6)",
           "하단에 3개의 점 로딩 애니메이션",
           "전체 화면 1920x720"
@@ -195,233 +233,197 @@
           "배경 원형 파동 효과 (무한 반복)",
           "로딩 점 순차 페이드 인/아웃"
         ],
-        "duration": "3초"
+        "duration": "3초",
+        "implementation": {
+          "useState": "isLoading (true → false)",
+          "useEffect": "setTimeout 3000ms",
+          "transition": "조건부 렌더링"
+        }
       },
       
       {
         "name": "MainDashboardScreen",
+        "file": "/components/MainDashboardPage.tsx",
         "description": "메인 대시보드 - 식물 성장 및 포인트 적립 시각화",
         "layout": {
           "header": {
             "position": "top-left (80px 내)",
+            "margin": "top-6 left-16",
             "elements": [
-              "날짜/요일 텍스트 (18sp, #B0BEC5)",
-              "날씨 정보 (아이콘 + 온도 + 지역, 16sp, #64B5F6)"
+              "날짜/요일 텍스트 (18sp, #B0BEC5) - '2025년 8월 14일 목요일'",
+              "날씨 정보 (아이콘 + 온도 + 지역, 16sp, #64B5F6) - Sun icon + '22°C | 맑음 | 서울특별시'"
             ]
           },
           "center_area": {
+            "position": "top-[100px] bottom-0 left-0 right-[400px]",
             "width": "1520px (전체 - 사이드네비 140px - 우측패널 400px)",
             "height": "640px (활성 영역)",
-            "content": "PlantScene Component"
+            "content": "PlantScene Component",
+            "alignment": "flex items-center justify-center"
           },
           "right_panel": {
             "width": "400px",
-            "background": "#1A1A1A",
-            "border_left": "#2E2E2E",
+            "background": "없음 (투명)",
             "content": "FeedbackSidePanel Component"
           }
         },
         "components": {
           "plant_scene": {
+            "file": "/components/PlantScene.tsx",
             "description": "포인트에 따라 성장하는 식물 애니메이션",
+            "container_size": "600x400px",
             "growth_stages": [
               {
                 "stage": 0,
                 "name": "Seed (씨앗)",
                 "point_range": "0-500",
-                "svg_design": {
-                  "size": "60x60dp",
-                  "description": "갈색과 녹색이 반반 나뉜 씨앗",
-                  "elements": [
-                    {
-                      "name": "왼쪽 반쪽 (갈색)",
-                      "path": "M30,10 C20,10 10,18 10,30 C10,42 20,50 30,50 L30,10 Z",
-                      "fill": "#C17A4F"
-                    },
-                    {
-                      "name": "왼쪽 텍스처",
-                      "shapes": [
-                        "ellipse cx=22 cy=25 rx=3 ry=5 fill=#A66943 opacity=0.5",
-                        "path (곡선) stroke=#A66943 opacity=0.4"
-                      ]
-                    },
-                    {
-                      "name": "오른쪽 반쪽 (녹색)",
-                      "path": "M30,10 C40,10 50,18 50,30 C50,42 40,50 30,50 L30,10 Z",
-                      "fill": "#81C784"
-                    },
-                    {
-                      "name": "오른��� 텍스처",
-                      "shapes": [
-                        "ellipse cx=37 cy=23 rx=4 ry=3 fill=#A5D6A7 opacity=0.6",
-                        "ellipse cx=38 cy=32 rx=3 ry=4 fill=#A5D6A7 opacity=0.4"
-                      ]
-                    },
-                    {
-                      "name": "중앙선",
-                      "path": "M30,10 L30,50",
-                      "stroke": "#6D4C41",
-                      "strokeWidth": "1.5dp",
-                      "opacity": 0.3
-                    }
-                  ]
-                },
-                "animation": "scale [1, 1.08, 1] + Y축 [0, -4, 0] (2.5초 무한 반복)"
+                "implementation": "Figma imported PNG image",
+                "asset": "figma:asset/d324268ea5e178c3f734a2767d6534572930cb97.png",
+                "size": "280x280dp",
+                "animation": "scale [1, 1.05, 1] + Y축 [0, -3, 0] (2.5초 무한 반복)"
               },
               {
                 "stage": 1,
                 "name": "Sprout (새싹)",
                 "point_range": "501-1000",
-                "svg_design": {
-                  "size": "120x140dp",
-                  "description": "흙더미 위에 자라는 새싹",
-                  "elements": [
-                    {
-                      "name": "왼쪽 잎",
-                      "group": [
-                        "ellipse cx=30 cy=35 rx=28 ry=18 fill=#81C784 rotate(-25)",
-                        "ellipse cx=30 cy=35 rx=20 ry=12 fill=#A5D6A7 opacity=0.6 rotate(-25)",
-                        "잎맥 path M30,35 L50,45 stroke=#66BB6A strokeWidth=1.5"
-                      ],
-                      "animation": "rotate [0, -3, 0] (2.5초 무한)"
-                    },
-                    {
-                      "name": "오른쪽 잎",
-                      "group": [
-                        "ellipse cx=90 cy=35 rx=28 ry=18 fill=#66BB6A rotate(25)",
-                        "ellipse cx=90 cy=35 rx=20 ry=12 fill=#A5D6A7 opacity=0.6 rotate(25)",
-                        "잎맥 path M90,35 L70,45 stroke=#81C784 strokeWidth=1.5"
-                      ],
-                      "animation": "rotate [0, 3, 0] (2.5초 무한, delay 0.3초)"
-                    },
-                    {
-                      "name": "줄기",
-                      "paths": [
-                        "path M60,45 Q58,80 60,110 stroke=#66BB6A strokeWidth=5",
-                        "path M60,45 Q58,80 60,110 stroke=#81C784 strokeWidth=3 (위에 덮기)"
-                      ]
-                    },
-                    {
-                      "name": "흙더미",
-                      "shapes": [
-                        "ellipse cx=60 cy=115 rx=35 ry=12 fill=#8D6E63",
-                        "ellipse cx=60 cy=112 rx=30 ry=10 fill=#A1887F",
-                        "circle cx=50 cy=110 r=4 fill=#6D4C41 opacity=0.4",
-                        "circle cx=72 cy=112 r=5 fill=#6D4C41 opacity=0.3"
-                      ]
-                    }
-                  ]
-                },
-                "animation": "scale [1, 1.02, 1] (3초 무한 반복)"
+                "implementation": "Figma imported PNG image",
+                "asset": "figma:asset/9c1ab17231d6c41476937d6a962c1d21ec06d7f5.png",
+                "size": "440x440dp",
+                "animation": "scale [1, 1.02, 1] + Y축 [0, -2, 0] (3초 무한 반복)"
               },
               {
                 "stage": 2,
                 "name": "Full Grown Plant (다육식물)",
                 "point_range": "1001+",
-                "svg_design": {
-                  "size": "180x200dp",
-                  "description": "여러 겹의 잎을 가진 다육식물",
-                  "elements": [
-                    {
-                      "name": "최상단 중앙 잎",
-                      "paths": [
-                        "path M90,10 C80,10 70,20 70,35 C70,50 80,65 90,70 C100,65 110,50 110,35 C110,20 100,10 90,10 Z fill=#66BB6A",
-                        "path M90,15 C83,15 77,22 77,33 C77,44 83,55 90,58 C97,55 103,44 103,33 C103,22 97,15 90,15 Z fill=#81C784",
-                        "잎맥 path M90,20 L90,60 stroke=#4CAF50 strokeWidth=1.5 opacity=0.3"
-                      ],
-                      "animation": "scale [1, 1.03, 1] (2.8초 무한)"
-                    },
-                    {
-                      "name": "중앙 위 왼쪽 잎",
-                      "paths": [
-                        "path M90,70 C70,75 50,85 45,100 C40,115 50,125 65,120 C80,115 88,100 90,85 Z fill=#81C784",
-                        "path M85,80 C70,83 60,90 58,100 C56,110 62,117 72,114 C82,111 87,100 87,90 Z fill=#A5D6A7 opacity=0.7"
-                      ],
-                      "animation": "rotate [0, -2, 0] (2.6초 무한)"
-                    },
-                    {
-                      "name": "중앙 위 오른쪽 잎",
-                      "paths": [
-                        "path M90,70 C110,75 130,85 135,100 C140,115 130,125 115,120 C100,115 92,100 90,85 Z fill=#66BB6A",
-                        "path M95,80 C110,83 120,90 122,100 C124,110 118,117 108,114 C98,111 93,100 93,90 Z fill=#A5D6A7 opacity=0.7"
-                      ],
-                      "animation": "rotate [0, 2, 0] (2.6초 무한, delay 0.2초)"
-                    },
-                    {
-                      "name": "하단 왼쪽 큰 잎",
-                      "paths": [
-                        "path M90,100 C65,110 35,125 25,145 C15,165 30,180 55,170 C80,160 88,135 90,115 Z fill=#81C784",
-                        "path M85,110 C65,118 45,130 38,145 C31,160 42,170 60,163 C78,156 84,135 85,120 Z fill=#A5D6A7 opacity=0.6"
-                      ],
-                      "animation": "rotate [0, -3, 0] (3.2초 무한)"
-                    },
-                    {
-                      "name": "하단 오른쪽 큰 잎",
-                      "paths": [
-                        "path M90,100 C115,110 145,125 155,145 C165,165 150,180 125,170 C100,160 92,135 90,115 Z fill=#66BB6A",
-                        "path M95,110 C115,118 135,130 142,145 C149,160 138,170 120,163 C102,156 96,135 95,120 Z fill=#A5D6A7 opacity=0.6"
-                      ],
-                      "animation": "rotate [0, 3, 0] (3.2초 무한, delay 0.3초)"
-                    },
-                    {
-                      "name": "중앙 하이라이트",
-                      "circles": [
-                        "circle cx=90 cy=90 r=25 fill=#81C784",
-                        "circle cx=90 cy=88 r=18 fill=#A5D6A7 opacity=0.5",
-                        "circle cx=85 cy=83 r=8 fill=#C8E6C9 opacity=0.6"
-                      ]
-                    }
-                  ]
-                },
-                "animation": "전체 Y축 [0, -5, 0] (3초 무한 반복), 각 잎 개별 회전 애니메이션"
+                "implementation": "Figma imported PNG image",
+                "asset": "figma:asset/059b4c1516a5fd6752183a64bf754e660ef133b8.png",
+                "size": "820x820dp",
+                "animation": "Y축 [0, -4, 0] (3.5초 무한 반복)"
               }
             ],
             "pot": {
               "design": "SVG 화분 (200x120)",
-              "colors": ["#4E342E", "#3E2723", "#5D4037", "#6D4C41"],
-              "gradient": "top to bottom"
+              "viewBox": "0 0 200 120",
+              "colors": {
+                "gradient": ["#4E342E", "#3E2723"],
+                "stroke": "#5D4037",
+                "soil_top": "#6D4C41"
+              },
+              "shapes": [
+                "화분 본체: path trapezoid",
+                "흙 표면: ellipse cx=100 cy=30 rx=50 ry=10",
+                "내부 흙: ellipse cx=100 cy=28 rx=45 ry=8"
+              ],
+              "position": "식물 아래, 중앙 정렬"
             },
             "watering_can": {
-              "position": "우측 상단 (식물 위)",
-              "size": "180x140",
-              "animation": "물주기 시 기울어짐 (-35도)",
-              "water_drops": "7개 순차 낙하 애니메이션 (#64B5F6)"
+              "file": "figma:asset/7a8563f10ac551f86adc750974786d0e98c30e50.png",
+              "position": "absolute right-[60px] top-[20px]",
+              "size": "200x200",
+              "animation": {
+                "trigger": "showAnimation prop",
+                "phases": [
+                  "초기: opacity=0, y=-30, x=30",
+                  "등장: opacity=1, y=0, x=0 (600ms)",
+                  "기울어짐: rotate=-25deg (2500ms)",
+                  "사라짐: opacity=0, y=-30 (1000ms)"
+                ],
+                "duration": "4000ms",
+                "delay": "200ms",
+                "easing": "[0.645, 0.045, 0.355, 1.0] (easeInOutCubic)"
+              },
+              "water_drops": {
+                "count": 20,
+                "color": "#64B5F6",
+                "animation": [
+                  "path stream: pathLength [0→1→0]",
+                  "개별 drops: cy [180→330], opacity [0→0.9→0]",
+                  "순차 delay: i * 0.06s"
+                ],
+                "filter": "drop-shadow(0 0 3px rgba(100,181,246,0.8))"
+              }
+            },
+            "water_splash": {
+              "position": "absolute left-1/2 top-[180px]",
+              "size": "96x96px (w-24 h-24)",
+              "animation": {
+                "opacity": "[0, 0, 0.6, 0.8, 0]",
+                "scale": "[0, 0, 1.2, 1.5, 2]",
+                "duration": "1500ms",
+                "delay": "2500ms"
+              },
+              "gradient": "radial-gradient(circle, rgba(100,181,246,0.4) 0%, transparent 70%)"
             },
             "sparkles": {
-              "count": 12,
+              "count": 16,
+              "grid": "4x4 (35px spacing)",
+              "base_position": "left-[180px] top-[140px]",
               "color": "#81C784",
-              "animation": "포인트 적립 시 상승 + 페이드아웃"
+              "size": "8px (w-2 h-2)",
+              "animation": {
+                "opacity": "[0, 1, 0.8, 0]",
+                "scale": "[0, 1.2, 1.5, 0]",
+                "y": "[0, -30, -60, -90]",
+                "x": "좌우 교대 [-45 ~ +45]",
+                "duration": "2600ms",
+                "delay": "2800ms + i * 60ms"
+              },
+              "shadow": "0 0 10px rgba(129,199,132,0.9)"
             }
           },
           
           "points_earned_popup": {
             "description": "포인트 적립 시 표시되는 중앙 팝업",
+            "file": "/components/MainDashboardPage.tsx (내부)",
             "trigger": "포인트 획득 이벤트 (2초 후)",
             "display": "2.8초 딜레이 후 페이드인",
+            "position": "mt-6 (PlantScene 아래)",
             "content": [
-              "ECO POINTS +{amount} (32sp, #81C784, bold)",
-              "적립 사유 텍스트 (20sp, #B0BEC5)"
+              "ECO POINTS +{amount} (32sp, #81C784, bold, text-shadow)",
+              "적립 사유 텍스트 (20sp, #B0BEC5) - '경제속도 (75km/h) 준수'"
             ],
-            "animation": "fade in + Y축 상승"
+            "animation": {
+              "initial": "opacity=0, y=20",
+              "animate": "opacity=1, y=0",
+              "exit": "opacity=0, y=-20",
+              "transition": "delay 2.8s, duration 0.8s, ease cubic"
+            },
+            "implementation": {
+              "library": "Motion (Framer Motion)",
+              "components": ["AnimatePresence", "motion.div"],
+              "state": "showPoints (useState boolean)"
+            }
           },
           
           "feedback_side_panel": {
+            "file": "/components/FeedbackSidePanel.tsx",
+            "position": "absolute right-0 top-0 bottom-0",
+            "width": "400px",
+            "background": "#1A1A1A",
+            "padding": "40px 32px",
             "header": {
               "icon": "Award (24dp, #81C784)",
               "title": "오늘의 리워드 (24sp)",
-              "subtitle": "친환경 운전으로 포인트를 획득했어요 (14sp)"
+              "subtitle": "친환경 운전으로 포인트를 획득했어요 (14sp, #B0BEC5)"
             },
             "total_card": {
               "background": "gradient (#81C784 to #66BB6A)",
+              "padding": "24px",
+              "border_radius": "16px",
+              "shadow": "0 4px 16px rgba(129,199,132,0.3)",
               "content": [
-                "오늘 적립 (14sp)",
-                "포인트 합계 (36sp, bold)",
-                "전체 보유: {total} P (12sp)"
+                "오늘 적립 (14sp, white)",
+                "포인트 합계 (36sp, bold, white)",
+                "전체 보유: {total} P (12sp, white/80)"
               ],
-              "icon": "Leaf 애니메이션 (회전)"
+              "icon": {
+                "component": "Leaf",
+                "size": "32dp",
+                "animation": "rotate [0, 10, 0] (3초 무한)"
+              }
             },
             "recent_entries": {
-              "title": "적립 내역",
+              "title": "적립 내역 (20sp, mb-4)",
               "count": 3,
               "items": [
                 {
@@ -448,9 +450,11 @@
               ],
               "card_style": {
                 "background": "#242424",
-                "border": "#2E2E2E",
+                "border": "1px solid #2E2E2E",
                 "padding": "16dp",
-                "hover_effect": "#2A2A2A"
+                "border_radius": "12px",
+                "hover_effect": "bg-[#2A2A2A]",
+                "transition": "colors"
               }
             }
           }
@@ -459,6 +463,7 @@
       
       {
         "name": "PointManagementScreen",
+        "file": "/components/PointManagementPage.tsx",
         "description": "포인트 내역, 리포트, 교환 관리 화면",
         "layout": {
           "header": {
@@ -469,21 +474,19 @@
             "style": "Horizontal tabs",
             "height": "48dp",
             "background": "#1E1E1E",
+            "active_color": "#81C784",
             "items": [
               {
                 "id": "history",
-                "label": "포인트 내역",
-                "active_color": "#81C784"
+                "label": "포인트 내역"
               },
               {
                 "id": "report",
-                "label": "리포트",
-                "active_color": "#81C784"
+                "label": "리포트"
               },
               {
                 "id": "exchange",
-                "label": "포인트 교환",
-                "active_color": "#81C784"
+                "label": "포인트 교환"
               }
             ]
           }
@@ -569,6 +572,7 @@
                   "title": "주간 적립 추이 (20sp)",
                   "background": "#1E1E1E",
                   "chart": {
+                    "library": "Recharts",
                     "type": "LineChart",
                     "height": "280dp",
                     "data": [
@@ -593,6 +597,7 @@
           
           "exchange_tab": {
             "grid": "3 columns",
+            "gap": "24dp",
             "items": [
               {
                 "id": 1,
@@ -603,7 +608,7 @@
               },
               {
                 "id": 2,
-                "icon": "Battery Charging",
+                "icon": "BatteryCharging",
                 "label": "충전 크레딧",
                 "points_required": 800,
                 "icon_size": "32dp"
@@ -633,7 +638,7 @@
           }
         },
         "dialog": {
-          "type": "AlertDialog",
+          "component": "AlertDialog (shadcn/ui)",
           "title": "교환 확인 (24sp)",
           "message": "{points} 포인트를 사용하여 {item}로 교환하시겠습니까? (16sp)",
           "buttons": [
@@ -653,54 +658,230 @@
       
       {
         "name": "DriverAnalysisScreen",
+        "file": "/components/DriverAnalysisPage.tsx",
         "description": "운전 패턴 분석 및 피드백 제공 화면",
         "layout": {
+          "padding": "40px",
+          "overflow": "overflow-y-auto",
           "header": {
-            "layout": "flex items-center justify-between",
+            "layout": "flex items-center gap-6 mb-5",
             "left": {
-              "title": "운전자 분석 (28sp)"
+              "title": "운전자 분석 (28sp, #FFFFFF, font-weight: 500)",
+              "flex": "flex-shrink-0"
             },
             "right": {
-              "subtitle": "운전 분석 요약 (2025.08.14 ~ 2025.08.20) (16sp)"
+              "component": "feedback_cards_inline",
+              "description": "헤더와 같은 줄에 피드백 카드 3개 배치",
+              "flex": "flex-1"
             }
           },
-          "sections": [
-            {
-              "type": "charts_grid",
-              "grid": "2 columns",
-              "gap": "24dp"
-            },
-            {
-              "type": "feedback_cards",
-              "grid": "3 columns",
-              "gap": "24dp"
-            },
-            {
-              "type": "summary_card",
-              "span": "full width"
-            }
+          "sections_order": [
+            "inline_feedback_cards (헤더 우측)",
+            "recent_driving_records",
+            "charts_grid",
+            "summary_card"
           ]
         },
+        
+        "feedback_cards": {
+          "position": "헤더 우측 (inline)",
+          "grid": "3 columns (flex-1 each)",
+          "gap": "16px (gap-4)",
+          "items": [
+            {
+              "icon": "ThumbsUp",
+              "text": "급가속 3회 감소, 매우 안정적 운전 유지!",
+              "color": "#81C784",
+              "border_left": "3px"
+            },
+            {
+              "icon": "Leaf",
+              "text": "경제속도 유지율 85%, 연비 효율 향상!",
+              "color": "#64B5F6",
+              "border_left": "3px"
+            },
+            {
+              "icon": "AlertTriangle",
+              "text": "급감속 5회 발생 — 부드러운 제동 필요",
+              "color": "#FFC107",
+              "border_left": "3px"
+            }
+          ],
+          "card_style": {
+            "background": "#1E1E1E",
+            "border": "#2E2E2E",
+            "padding": "16px (p-4)",
+            "height": "full (h-full)",
+            "shadow": "0px 3px 10px rgba(0,0,0,0.3)"
+          },
+          "animation": {
+            "type": "motion.div",
+            "initial": "opacity: 0, y: 10",
+            "animate": "opacity: 1, y: 0",
+            "transition": "delay: idx * 0.1, duration: 0.6, ease: cubic"
+          }
+        },
+
+        "recent_driving_records": {
+          "description": "주간 캘린더 기반 주행 기록 조회",
+          "title": "최근 주행기록 (20sp, #FFFFFF, mb-4)",
+          "layout": {
+            "weekly_calendar": {
+              "description": "7일 주간 캘린더 + 좌우 네비게이션",
+              "navigation": {
+                "buttons": {
+                  "size": "44x44px",
+                  "background": "#2E2E2E",
+                  "hover": "#3E3E3E",
+                  "icon": "ChevronLeft / ChevronRight",
+                  "icon_size": "24px",
+                  "icon_color": "#81C784"
+                },
+                "layout": "flex items-center justify-between"
+              },
+              "day_boxes": {
+                "grid": "flex gap-2",
+                "count": 7,
+                "size": "64x64px",
+                "border_radius": "rounded-lg",
+                "states": {
+                  "default": {
+                    "background": "#2E2E2E",
+                    "border": "2px solid transparent"
+                  },
+                  "selected": {
+                    "background": "#81C784",
+                    "border": "2px solid #81C784",
+                    "text_color": "#121212"
+                  },
+                  "has_data": {
+                    "indicator": {
+                      "type": "dot",
+                      "size": "6x6px",
+                      "position": "mt-1",
+                      "color_default": "#81C784",
+                      "color_selected": "#121212"
+                    }
+                  }
+                },
+                "content": [
+                  {
+                    "element": "요일",
+                    "size": "12sp",
+                    "color_default": "#B0BEC5",
+                    "color_selected": "#121212",
+                    "values": ["일", "월", "화", "수", "목", "금", "토"]
+                  },
+                  {
+                    "element": "날짜",
+                    "size": "16sp",
+                    "margin_top": "2px",
+                    "color_default": "#FFFFFF",
+                    "color_selected": "#121212"
+                  }
+                ],
+                "interaction": {
+                  "onClick": "setSelectedDate(date)",
+                  "transition": "transition-all"
+                }
+              },
+              "state_management": {
+                "weekOffset": "useState(0) - 주 단위 오프셋",
+                "selectedDate": "useState(new Date()) - 선택된 날짜",
+                "weekDays": "계산된 7일 배열"
+              }
+            },
+            "selected_date_summary": {
+              "description": "선택된 날짜의 주행 데이터 3개 카드",
+              "grid": "3 columns (grid-cols-3)",
+              "gap": "16px (gap-4)",
+              "cards": [
+                {
+                  "type": "distance",
+                  "title": "주행거리 (14sp, #B0BEC5)",
+                  "value": "{distance} km (24sp, #FFFFFF)",
+                  "unit": "km (16sp, #B0BEC5, ml-1)",
+                  "background": "#2E2E2E",
+                  "padding": "16px (p-4)",
+                  "border_radius": "rounded-lg"
+                },
+                {
+                  "type": "time",
+                  "title": "운전 시간 (14sp, #B0BEC5)",
+                  "value": "{time} 분 (24sp, #FFFFFF)",
+                  "unit": "분 (16sp, #B0BEC5, ml-1)",
+                  "background": "#2E2E2E",
+                  "padding": "16px (p-4)",
+                  "border_radius": "rounded-lg"
+                },
+                {
+                  "type": "points",
+                  "title": "획득 포인트 (14sp, #B0BEC5)",
+                  "value": "+{points} P (24sp)",
+                  "value_color": "#81C784 or #EF5350 (delta 기반)",
+                  "delta_indicator": {
+                    "icon": "TrendingUp / TrendingDown",
+                    "size": "16px",
+                    "text": "+{delta}% / -{delta}%",
+                    "color": "#81C784 / #EF5350"
+                  },
+                  "background": "#2E2E2E",
+                  "padding": "16px (p-4)",
+                  "border_radius": "rounded-lg"
+                }
+              ],
+              "mock_data": {
+                "2025-11-01": {"distance": 45.3, "time": 82, "points": 185, "delta": 12},
+                "2025-11-02": {"distance": 32.1, "time": 65, "points": 142, "delta": -8},
+                "2025-11-03": {"distance": 52.8, "time": 95, "points": 210, "delta": 18},
+                "default": {"distance": 0, "time": 0, "points": 0, "delta": 0}
+              }
+            }
+          }
+        },
+
         "charts": {
+          "grid": "2 columns (grid-cols-2)",
+          "gap": "24px",
+          "margin_top": "32px (mt-8)",
           "pattern_chart": {
             "type": "BarChart",
-            "title": "운전 패턴 분석 (20sp)",
+            "library": "Recharts",
+            "title": "운전 패턴 분석 (20sp, #FFFFFF, mb-4)",
+            "background": "#1E1E1E",
             "height": "250dp",
             "data": [
-              {"name": "급가속", "value": 3, "color": "#EF5350"},
-              {"name": "급감속", "value": 5, "color": "#EF5350"},
-              {"name": "공회전", "value": 2, "color": "#FFC107"},
-              {"name": "급출발", "value": 1, "color": "#81C784"},
-              {"name": "급정지", "value": 2, "color": "#E53935"}
+              {"name": "가속", "negative": 3, "positive": 2},
+              {"name": "감속", "negative": 5, "positive": 3},
+              {"name": "출발", "negative": 1, "positive": 4},
+              {"name": "정지", "negative": 2, "positive": 3}
             ],
-            "bar_radius": "6dp",
+            "bars": [
+              {
+                "dataKey": "negative",
+                "stackId": "a",
+                "fill": "#EF5350",
+                "name": "급함",
+                "radius": "[6, 6, 0, 0]"
+              },
+              {
+                "dataKey": "positive",
+                "stackId": "a",
+                "fill": "#81C784",
+                "name": "안정",
+                "radius": "[6, 6, 0, 0]"
+              }
+            ],
             "grid_color": "#2E2E2E",
-            "axis_text_size": "14sp"
+            "axis_text_size": "14sp",
+            "axis_color": "#B0BEC5"
           },
           
           "trend_chart": {
             "type": "Dual LineChart",
-            "title": "에코 포인트 / 평균 속도 추이 (20sp)",
+            "library": "Recharts",
+            "title": "에코 포인트 / 평균 속도 추이 (20sp, #FFFFFF, mb-4)",
+            "background": "#1E1E1E",
             "height": "250dp",
             "data": [
               {"date": "8/14", "ecoPoints": 120, "avgSpeed": 62},
@@ -713,67 +894,81 @@
             ],
             "lines": [
               {
+                "dataKey": "ecoPoints",
                 "name": "에코 포인트",
-                "color": "#81C784",
-                "width": "2.5dp",
-                "y_axis": "left"
+                "stroke": "#81C784",
+                "strokeWidth": "2.5dp",
+                "yAxisId": "left",
+                "dot": {"fill": "#81C784", "r": 4}
               },
               {
+                "dataKey": "avgSpeed",
                 "name": "평균 속도 (km/h)",
-                "color": "#64B5F6",
-                "width": "2.5dp",
-                "y_axis": "right"
+                "stroke": "#64B5F6",
+                "strokeWidth": "2.5dp",
+                "yAxisId": "right",
+                "dot": {"fill": "#64B5F6", "r": 4}
+              }
+            ],
+            "y_axes": [
+              {
+                "yAxisId": "left",
+                "orientation": "left",
+                "stroke": "#81C784"
+              },
+              {
+                "yAxisId": "right",
+                "orientation": "right",
+                "stroke": "#64B5F6"
               }
             ]
           }
         },
         
-        "feedback_cards": {
-          "items": [
-            {
-              "icon": "ThumbsUp",
-              "text": "급가속 3회 감소, 매우 안정적 운전 유지!",
-              "color": "#81C784",
-              "border_left": "3dp"
-            },
-            {
-              "icon": "Leaf",
-              "text": "공회전 시간 12% 개선, 에너지 절약 우수!",
-              "color": "#64B5F6",
-              "border_left": "3dp"
-            },
-            {
-              "icon": "AlertTriangle",
-              "text": "급감속 5회 발생 — 부드러운 제동 필요",
-              "color": "#FFC107",
-              "border_left": "3dp"
-            }
-          ],
-          "card_style": {
-            "background": "#1E1E1E",
-            "padding": "20dp",
-            "height": "180dp"
-          },
-          "animation": "순차 페이드인 (0.1초 간격)"
-        },
-        
         "summary_card": {
+          "margin_top": "32px (mt-8)",
           "background": "#1E1E1E",
           "height": "160dp",
+          "border_radius": "16px",
+          "padding": "32px",
           "centered": true,
           "content": {
             "animation": {
               "type": "SVG Circle + Checkmark",
+              "component": "motion.svg",
               "size": "64dp",
               "colors": ["#81C784", "#64B5F6"],
               "effect": "path drawing + rotation"
             },
-            "title": "전 분석 대시보드 (20sp)",
-            "subtitle": "안전하고 경제적인 운전을 실천하고 있습니다 (16sp)"
+            "title": "종합 분석 대시보드 (20sp, #FFFFFF)",
+            "subtitle": "안전하고 경제적인 운전을 실천하고 있습니다 (16sp, #B0BEC5)"
           }
         }
       }
     ]
+  },
+
+  "component_files": {
+    "core": {
+      "/App.tsx": "메인 앱 컴포넌트 - 라우팅, 전역 상태",
+      "/components/SplashScreenDark.tsx": "스플래시 화면",
+      "/components/SideNav.tsx": "사이드 네비게이션"
+    },
+    "main_dashboard": {
+      "/components/MainDashboardPage.tsx": "메인 대시보드 페이지",
+      "/components/PlantScene.tsx": "식물 성장 애니메이션",
+      "/components/FeedbackSidePanel.tsx": "우측 피드백 패널"
+    },
+    "point_management": {
+      "/components/PointManagementPage.tsx": "포인트 관리 페이지"
+    },
+    "driver_analysis": {
+      "/components/DriverAnalysisPage.tsx": "운전자 분석 페이지"
+    },
+    "ui_components": {
+      "/components/ui/*": "Shadcn UI 컴포넌트 라이브러리",
+      "/components/figma/ImageWithFallback.tsx": "이미지 폴백 컴포넌트"
+    }
   },
 
   "data_models": {
@@ -808,12 +1003,22 @@
         "ecoPoints: Int"
       ]
     },
+    "DrivingRecord": {
+      "fields": [
+        "date: Date",
+        "distance: Float (km)",
+        "time: Int (분)",
+        "points: Int",
+        "delta: Int (전일 대비 증감률 %)"
+      ],
+      "note": "주간 캘린더에서 사용되는 일별 주행 기록"
+    },
     "ExchangeItem": {
       "fields": [
         "id: Long",
         "name: String",
         "pointsRequired: Int",
-        "iconName: String",
+        "icon: String",
         "available: Boolean"
       ]
     }
@@ -821,60 +1026,106 @@
 
   "animations": {
     "plant_growth": {
-      "type": "Custom Compose Animation",
+      "library": "Motion (Framer Motion)",
+      "type": "Spring Animation",
       "duration": "1600ms",
-      "easing": "EaseInOutCubic",
-      "trigger": "포인트 변경"
+      "easing": "EaseInOutCubic [0.645, 0.045, 0.355, 1.0]",
+      "trigger": "포인트 변경 (showAnimation prop)",
+      "properties": {
+        "scale": "[0 → 1]",
+        "y": "[20 → 0]",
+        "stiffness": 80
+      }
     },
     "watering_animation": {
       "phases": [
-        {"action": "물뿌리개 등장", "duration": "600ms"},
-        {"action": "기울어짐", "angle": "-35deg", "duration": "2500ms"},
-        {"action": "물방울 낙하", "count": 7, "interval": "100ms"}
-      ]
+        {"action": "물뿌리개 등장", "duration": "600ms", "properties": ["opacity", "y", "x"]},
+        {"action": "기울어짐", "angle": "-25deg", "duration": "2500ms"},
+        {"action": "물방울 낙하", "count": 20, "interval": "60ms", "duration": "2000ms"},
+        {"action": "사라짐", "duration": "1000ms"}
+      ],
+      "total_duration": "4000ms",
+      "delay": "200ms"
     },
     "sparkle_effect": {
-      "count": 12,
-      "duration": "2400ms",
-      "direction": "위로 상승",
-      "opacity": "0 → 1 → 0"
+      "count": 16,
+      "layout": "4x4 grid",
+      "duration": "2600ms",
+      "direction": "위로 상승 (y: 0 → -90)",
+      "opacity": "[0 → 1 → 0.8 → 0]",
+      "scale": "[0 → 1.2 → 1.5 → 0]",
+      "delay_base": "2800ms",
+      "stagger": "60ms per item"
     },
     "card_entrance": {
       "type": "FadeIn + SlideUp",
-      "duration": "400ms",
-      "stagger": "100ms"
+      "initial": {"opacity": 0, "y": 10},
+      "animate": {"opacity": 1, "y": 0},
+      "duration": "600ms",
+      "stagger": "100ms",
+      "easing": "cubic [0.645, 0.045, 0.355, 1.0]"
     },
     "tab_transition": {
       "type": "Crossfade",
       "duration": "300ms"
+    },
+    "calendar_transition": {
+      "type": "All properties",
+      "class": "transition-all",
+      "properties": ["background", "border", "color"]
     }
   },
 
   "state_management": {
-    "architecture": "MVVM + StateFlow",
-    "viewmodels": [
-      "MainDashboardViewModel",
-      "PointManagementViewModel",
-      "DriverAnalysisViewModel"
-    ],
-    "state_holders": [
-      "ecoPoints: StateFlow<Int>",
-      "pointEntries: StateFlow<List<PointEntry>>",
-      "drivingPatterns: StateFlow<List<DrivingPattern>>",
-      "selectedTab: MutableState<String>",
-      "plantGrowthStage: Derived from ecoPoints"
-    ]
+    "architecture": "React Hooks (useState, useEffect)",
+    "global_state": {
+      "isLoading": "boolean - 스플래시 화면 제어",
+      "activeScreen": "string - 현재 활성 화면 ('main' | 'points' | 'analysis')",
+      "ecoPoints": "number - 전역 포인트 (초기값: 1230)"
+    },
+    "local_states": {
+      "MainDashboardPage": [
+        "showPoints: boolean",
+        "pointsEarned: number"
+      ],
+      "DriverAnalysisPage": [
+        "weekOffset: number",
+        "selectedDate: Date",
+        "weekDays: Date[]"
+      ]
+    },
+    "props_flow": {
+      "App → MainDashboardPage": "ecoPoints, onPointsChange",
+      "App → PointManagementPage": "ecoPoints, onExchange",
+      "MainDashboardPage → PlantScene": "showAnimation, points",
+      "MainDashboardPage → FeedbackSidePanel": "ecoPoints"
+    }
   },
 
   "libraries": {
-    "required": [
+    "required": {
+      "react": "^18.x",
+      "tailwindcss": "^4.0",
+      "motion/react": "Framer Motion (Motion)",
+      "recharts": "차트 라이브러리",
+      "lucide-react": "아이콘",
+      "sonner": "^2.0.3 (토스트 알림)"
+    },
+    "ui_framework": {
+      "shadcn/ui": "재사용 가능한 UI 컴포넌트",
+      "components": [
+        "Card", "Button", "Tabs", "AlertDialog",
+        "Dialog", "ScrollArea", "Separator"
+      ]
+    },
+    "android_equivalent": [
       "androidx.compose.ui:ui",
       "androidx.compose.material3:material3",
       "androidx.compose.animation:animation",
       "androidx.lifecycle:lifecycle-viewmodel-compose",
       "androidx.navigation:navigation-compose",
       "com.google.accompanist:accompanist-systemuicontroller",
-      "MPAndroidChart 또는 Vico (차트 라이브러리)",
+      "MPAndroidChart 또는 Vico (차트)",
       "Coil (이미지 로딩)",
       "kotlinx-coroutines-android"
     ],
@@ -888,81 +1139,84 @@
   "features": {
     "core": [
       "포인트 실시간 적립 및 표시",
-      "식물 성장 비주얼 피드백",
+      "식물 성장 비주얼 피드백 (3단계)",
       "운전 패턴 분석 및 시각화",
       "포인트 교환 시스템",
-      "일별/주별 리포트"
+      "일별/주별 리포트",
+      "주간 캘린더 기반 주행 기록 조회"
     ],
     "animations": [
       "식물 성장 애니메이션 (3단계)",
       "물뿌리개 물주기 효과",
       "반짝임 효과 (sparkles)",
-      "카드 등장 애니메이션",
-      "차트 그리기 애니메이션"
+      "카드 등장 애니메이션 (순차 페이드인)",
+      "차트 그리기 애니메이션",
+      "물 스플래시 효과",
+      "네비게이션 활성 표시 애니메이션"
     ],
     "ux": [
-      "IVI 최적화 터치 타겟",
+      "IVI 최적화 터치 타겟 (88x88dp)",
       "다크 테마 일관성",
       "명확한 시각적 피드백",
       "직관적인 네비게이션",
-      "고대비 텍스트"
+      "고대비 텍스트 (#FFFFFF, #B0BEC5)",
+      "Hover/Active 상태 표시",
+      "반응형 차트",
+      "주간 캘린더 인터랙션"
     ]
   },
 
   "development_notes": {
     "performance": [
-      "Compose로 60fps 유지",
-      "차트 데이터 페이징 처리",
-      "애니메이션 최적화 (remember)",
-      "LazyColumn 사용으로 메모리 효율화"
+      "React 최적화 (useMemo, useCallback)",
+      "차트 데이터 효율적 렌더링",
+      "애니메이션 최적화 (Motion)",
+      "이미지 lazy loading (ImageWithFallback)",
+      "60fps 유지 목표"
     ],
     "accessibility": [
-      "모든 터치 영역 88dp 이상",
-      "텍스트 크기 sp 단위",
-      "색상 대비 4.5:1 이상",
-      "아이콘에 contentDescription 추가"
+      "최소 터치 영역 준수",
+      "고대비 색상 사용",
+      "명확한 아이콘 + 텍스트 레이블",
+      "키보드 네비게이션 지원 (웹)"
     ],
-    "testing": [
-      "1920x720 에뮬레이터 설정",
-      "Landscape 고정 테스트",
-      "다양한 포인트 시나리오 테스트",
-      "애니메이션 성능 프로파일링"
+    "design_consistency": [
+      "통일된 색상 팔레트",
+      "일관된 border-radius (8/12/16/20dp)",
+      "통일된 그림자 효과",
+      "일관된 spacing (40/24/12px)",
+      "일관된 애니메이션 easing"
+    ],
+    "code_organization": [
+      "컴포넌트 분리 (Single Responsibility)",
+      "재사용 가능한 UI 컴포넌트 (shadcn/ui)",
+      "Props 인터페이스 정의",
+      "Mock 데이터 구조 명확화",
+      "타입 안정성 (TypeScript)"
+    ],
+    "android_migration": [
+      "Jetpack Compose로 변환 가능한 구조",
+      "MVVM 패턴 적용 준비",
+      "StateFlow 대체 가능한 상태 관리",
+      "Composable 함수로 매핑 가능",
+      "Material Design 3 호환"
     ]
   },
 
-  "implementation_priority": [
-    "1. 프로젝트 구조 및 테마 설정",
-    "2. Navigation 및 화면 전환",
-    "3. 데이터 모델 및 ViewModel",
-    "4. MainDashboard 기본 레이아웃",
-    "5. PlantScene 컴포넌트 (정적 → 애니메이션)",
-    "6. FeedbackSidePanel 구현",
-    "7. PointManagement 화면 (탭 + 차트)",
-    "8. DriverAnalysis 화면 (차트 + 피드백)",
-    "9. 물뿌리개 애니메이션 추가",
-    "10. 반짝임 효과 및 최종 폴리싱"
-  ],
-
-  "sample_data": {
-    "initial_points": 1230,
-    "daily_entries": [
-      {"label": "경제속도 준수", "points": 130, "time": "14:23", "icon": "Target", "color": "#81C784"},
-      {"label": "급가속 0회", "points": 85, "time": "14:10", "icon": "Leaf", "color": "#66BB6A"},
-      {"label": "급감속 0회", "points": 85, "time": "14:10", "icon": "Zap", "color": "#64B5F6"}
-    ],
-    "exchange_items": [
-      {"name": "커피 쿠폰", "points": 300, "icon": "Coffee"},
-      {"name": "충전 크레딧", "points": 800, "icon": "BatteryCharging"},
-      {"name": "기프트 카드", "points": 1000, "icon": "Gift"}
-    ]
+  "version_history": {
+    "v1.0": "초기 구현 - 메인 대시보드, 포인트 관리, 운전자 분석",
+    "v1.1": "운전자 분석 페이지에 '최근 주행기록' 기능 추가",
+    "v1.2": "주간 캘린더 UI 개선 (64x64px 박스)"
   },
 
-  "additional_instructions": {
-    "code_style": "Kotlin 코드 컨벤션 준수, Compose Best Practices 적용",
-    "comments": "각 컴포넌트에 한글 주석 추가 (특히 IVI 가이드라인 관련)",
-    "theming": "Material3 다크 테마 커스터마이징, 색상은 정확히 명시된 값 사용",
-    "testing_data": "더미 데이터를 사용하여 모든 상태 테스트 가능하도록 구현",
-    "modularity": "재사용 가능한 Composable 함수로 분리",
-    "error_handling": "포인트 부족, 네트워크 오류 등 예외 상황 Toast 또는 Snackbar로 처리"
-  }
+  "future_enhancements": [
+    "다국어 지원 (i18n)",
+    "음성 피드백",
+    "실시간 운전 데이터 연동",
+    "AI 기반 운전 패턴 분석",
+    "소셜 공유 기능",
+    "월간/연간 리포트",
+    "게임화 요소 (배지, 레벨)",
+    "커뮤니티 랭킹"
+  ]
 }

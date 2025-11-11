@@ -30,141 +30,89 @@ export function PlantScene({
     <div className="relative w-[600px] h-[400px] flex items-end justify-center">
       {/* Plant Container - 중앙 */}
       <div className="relative flex flex-col items-center">
-        {/* Plant Pot */}
+        {/* Plant Growth - 화분 제거하고 식물만 표시 */}
         <motion.div
           className="relative"
-          initial={{ scale: 0.85, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, ease: cubicEasing }}
+          initial={{ scale: 0, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
+          transition={{
+            duration: 1.6,
+            delay: showAnimation ? 2.8 : 0,
+            type: "spring",
+            stiffness: 80,
+          }}
         >
-          <svg
-            width="200"
-            height="120"
-            viewBox="0 0 200 120"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient
-                id="potGradient"
-                x1="0%"
-                y1="0%"
-                x2="0%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="#4E342E" />
-                <stop offset="100%" stopColor="#3E2723" />
-              </linearGradient>
-            </defs>
-
-            <path
-              d="M50 30 L40 100 C40 108 48 115 57 115 L143 115 C152 115 160 108 160 100 L150 30 Z"
-              fill="url(#potGradient)"
-              stroke="#5D4037"
-              strokeWidth="3"
-            />
-            <ellipse
-              cx="100"
-              cy="30"
-              rx="50"
-              ry="10"
-              fill="#5D4037"
-              stroke="#6D4C41"
-              strokeWidth="3"
-            />
-            <ellipse
-              cx="100"
-              cy="28"
-              rx="45"
-              ry="8"
-              fill="#6D4C41"
-            />
-          </svg>
-
-          {/* Plant Growth - 화분 위에 */}
-          <motion.div
-            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2"
-            initial={{ scale: 0, y: 20 }}
-            animate={{ scale: 1, y: 0 }}
-            transition={{
-              duration: 1.6,
-              delay: showAnimation ? 2.8 : 0,
-              type: "spring",
-              stiffness: 80,
-            }}
-          >
-            {/* Seed Stage */}
-            {growthStage === 0 && (
-              <motion.div
-                className="flex flex-col items-center"
-                animate={{ scale: [1, 1.05, 1], y: [0, -3, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: cubicEasing,
+          {/* Seed Stage */}
+          {growthStage === 0 && (
+            <motion.div
+              className="flex flex-col items-center"
+              animate={{ scale: [1, 1.05, 1], y: [0, -3, 0] }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: cubicEasing,
+              }}
+            >
+              <ImageWithFallback
+                src={seedImage}
+                alt="씨앗"
+                width={280}
+                height={280}
+                style={{
+                  filter:
+                    "drop-shadow(0 4px 12px rgba(129,199,132,0.4))",
                 }}
-              >
-                <ImageWithFallback
-                  src={seedImage}
-                  alt="씨앗"
-                  width={280}
-                  height={280}
-                  style={{
-                    filter:
-                      "drop-shadow(0 4px 12px rgba(129,199,132,0.4))",
-                  }}
-                />
-              </motion.div>
-            )}
+              />
+            </motion.div>
+          )}
 
-            {/* Sprout Stage */}
-            {growthStage === 1 && (
-              <motion.div
-                className="flex flex-col items-center"
-                animate={{ scale: [1, 1.02, 1], y: [0, -2, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: cubicEasing,
+          {/* Sprout Stage */}
+          {growthStage === 1 && (
+            <motion.div
+              className="flex flex-col items-center"
+              animate={{ scale: [1, 1.02, 1], y: [0, -2, 0] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: cubicEasing,
+              }}
+            >
+              <ImageWithFallback
+                src={sproutImage}
+                alt="새싹"
+                width={440}
+                height={440}
+                style={{
+                  filter:
+                    "drop-shadow(0 4px 16px rgba(129,199,132,0.5))",
                 }}
-              >
-                <ImageWithFallback
-                  src={sproutImage}
-                  alt="새싹"
-                  width={440}
-                  height={440}
-                  style={{
-                    filter:
-                      "drop-shadow(0 4px 16px rgba(129,199,132,0.5))",
-                  }}
-                />
-              </motion.div>
-            )}
+              />
+            </motion.div>
+          )}
 
-            {/* Full Grown Plant */}
-            {growthStage === 2 && (
-              <motion.div
-                className="flex flex-col items-center"
-                animate={{ y: [0, -4, 0] }}
-                transition={{
-                  duration: 3.5,
-                  repeat: Infinity,
-                  ease: cubicEasing,
+          {/* Full Grown Plant */}
+          {growthStage === 2 && (
+            <motion.div
+              className="flex flex-col items-center"
+              animate={{ y: [0, -4, 0] }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                ease: cubicEasing,
+              }}
+            >
+              <ImageWithFallback
+                src={plantImage}
+                alt="다육식물"
+                width={273}
+                height={273}
+                style={{
+                  filter:
+                    "drop-shadow(0 6px 20px rgba(129,199,132,0.6))",
                 }}
-              >
-                <ImageWithFallback
-                  src={plantImage}
-                  alt="다육식물"
-                  width={820}
-                  height={820}
-                  style={{
-                    filter:
-                      "drop-shadow(0 6px 20px rgba(129,199,132,0.6))",
-                  }}
-                />
-              </motion.div>
-            )}
-          </motion.div>
+              />
+            </motion.div>
+          )}
         </motion.div>
       </div>
 
