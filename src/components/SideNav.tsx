@@ -24,28 +24,6 @@ export function SideNav({ activeScreen, onScreenChange }: SideNavProps) {
           className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#81C784] to-[#64B5F6] flex items-center justify-center"
           style={{ boxShadow: '0 4px 16px rgba(129,199,132,0.4)' }}
         >
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* 흙더미 */}
-            <ellipse cx="20" cy="30" rx="14" ry="4" fill="#8D6E63" opacity="0.9"/>
-            <path d="M10 28C10 28 12 24 20 24C28 24 30 28 30 28L28 32C28 32 26 30 20 30C14 30 12 32 12 32L10 28Z" fill="#A1887F"/>
-            <ellipse cx="15" cy="27" rx="2" ry="1" fill="#6D4C41" opacity="0.6"/>
-            <ellipse cx="24" cy="28" rx="2.5" ry="1.2" fill="#6D4C41" opacity="0.6"/>
-            
-            {/* 줄기 */}
-            <path d="M20 24L20 14" stroke="#7CB342" strokeWidth="1.5" strokeLinecap="round"/>
-            
-            {/* 왼쪽 잎 */}
-            <path d="M20 16C20 16 14 12 10 10C10 10 9 14 12 18C15 22 20 20 20 20" fill="#9CCC65"/>
-            <path d="M20 16C20 16 14 12 10 10C10 10 9 14 12 18C15 22 20 20 20 20" fill="#8BC34A" opacity="0.7"/>
-            
-            {/* 오른쪽 잎 */}
-            <path d="M20 16C20 16 26 12 30 10C30 10 31 14 28 18C25 22 20 20 20 20" fill="#9CCC65"/>
-            <path d="M20 16C20 16 26 12 30 10C30 10 31 14 28 18C25 22 20 20 20 20" fill="#8BC34A" opacity="0.7"/>
-            
-            {/* 잎맥 */}
-            <path d="M20 17L14 13" stroke="#7CB342" strokeWidth="0.5" opacity="0.5"/>
-            <path d="M20 17L26 13" stroke="#7CB342" strokeWidth="0.5" opacity="0.5"/>
-          </svg>
         </div>
       </div>
 
